@@ -2,14 +2,11 @@
 from langchain.chains import create_history_aware_retriever
 from langchain_core.prompts import MessagesPlaceholder
 from langchain_core.messages import HumanMessage, AIMessage
-from langchain_community.llms import Ollama
 from langchain.prompts import ChatPromptTemplate, PromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.vectorstores import Chroma
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain_community.llms import HuggingFaceHub
-from langchain_community.llms import HuggingFaceEndpoint
 import os
 from dotenv import load_dotenv
 
