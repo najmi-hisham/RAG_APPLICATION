@@ -3,6 +3,9 @@ from RAG_utils import ask_question, initialize_rag_system, clear_chat_history
 import tiktoken
 import re
 
+# Access secret value from Streamlit secrets
+api_key = st.secrets["MISTRAL_API_KEY"]
+
 # Initialize RAG system (you can cache this)
 @st.cache_resource
 def load_rag_system():
