@@ -10,6 +10,10 @@ from langchain.embeddings import HuggingFaceEmbeddings
 import os
 from dotenv import load_dotenv
 
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 # Load environment variables from .env file
 load_dotenv()
 

@@ -3,6 +3,10 @@ from RAG_utils import ask_question, initialize_rag_system, clear_chat_history
 import tiktoken
 import re
 
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 # Access secret value from Streamlit secrets
 api_key = st.secrets["MISTRAL_API_KEY"]
 
