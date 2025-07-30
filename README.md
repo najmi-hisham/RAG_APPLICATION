@@ -13,7 +13,7 @@ This project serves as a aimple showcase of RAG (Retrieval-Augmented Generation)
 ## 🏗️ Architecture
 
 ```
-![Demo Screenshot](flowchart.png)
+![FLow chartt](flowchart.png)
 ```
 
 The system follows the classic RAG pipeline:
@@ -64,7 +64,7 @@ RAG_APPLICATION/
 1. **Clone the repository**
    ```bash
    git clone https://github.com/najmi-hisham/RAG_APPLICATION.git
-   cd rag-chatbot
+   cd RAG_APPLICATION
    ```
 
 2. **Install dependencies**
@@ -76,6 +76,7 @@ RAG_APPLICATION/
    ```bash
    cp .env.example .env
    # Edit .env with your API keys and configuration
+   For this project im using mistral API key for LLM usage
    ```
 
 ### Usage
