@@ -1,52 +1,54 @@
 # RAG Chatbot - Simple Retrieval-Augmented Generation Demo
 
-A minimal implementation of a Retrieval-Augmented Generation (RAG) chatbot that demonstrates how RAG systems work by combining document retrieval with language model generation.
+A minimal implementation of a Retrieval-Augmented Generation (RAG) chatbot that demonstrates how RAG systems work by combining document retrieval with large language model generation. For this application we are using one pdf file as a source file for storing embeddings and retireve later (2408.09869v5.pdf). You can download it or go to https://arxiv.org/pdf/2408.09869. For LLM, a simple and fast is choosen which is model: mistral-small-latest and embeddings model is from huggingFace : sentence-transformers/all-mpnet-base-v2. The reason behind that is because of the free tier. The purpose is only to demonstate on how simple RAG works.
 
 ## 🎯 Purpose
 
-This project serves as an educational showcase of RAG (Retrieval-Augmented Generation) technology, demonstrating how to:
-- Extract and embed content from documents
+This project serves as a aimple showcase of RAG (Retrieval-Augmented Generation) technology, demonstrating how to:
+- Extract documents and create embeddings from the extracted chunks.
 - Store embeddings in a vector database
-- Retrieve relevant context based on user queries
+- Retrieve relevant context based on user queries/question
 - Generate informed responses using retrieved context
 
 ## 🏗️ Architecture
 
 ```
-User Query → Embedding → Vector Search → Context Retrieval → LLM Generation → Response
+![Demo Screenshot](flowchart.png)
 ```
 
 The system follows the classic RAG pipeline:
-1. **Document Processing**: PDF content is processed using Docling
-2. **Embedding Creation**: Text chunks are converted to vector embeddings
+1. **Document Processing**: PDF content is processed using Docling with langchain tools
+2. **Embedding Creation**: Text chunks are converted to vector embeddings using embeddings model from huggingFace
 3. **Vector Storage**: Embeddings are stored in ChromaDB
-4. **Query Processing**: User questions are embedded and matched against stored vectors
-5. **Context Retrieval**: Relevant document chunks are retrieved
-6. **Response Generation**: LLM generates answers using retrieved context
+4. **Query Processing**: Raw user questions that being summarized in one sentence to make it aware of past conversation too (history aware sentence) is embedded and matched against stored vectors
+5. **Context Retrieval**: Relevant document chunks are retrieved based on the summary of user question with past conversation (history aware sentence)
+6. **Response Generation**: LLM generates answers using prompt with input : past conversation, retrived chunks, raw user input
+
+**History aware sentence example**
+Past
+A: I love yakiniku, please suggest me good restaurant.
+B: Of course, you can go to ABC restaurant.
+Current
+A: What is the price range there?
+history aware sentence: What is price range for yakiniku at ABC restaurant?
 
 ## 🔧 Tech Stack
 
 - **Document Processing**: Docling (for PDF parsing and content extraction)
 - **Vector Database**: ChromaDB (for embedding storage and similarity search)
-- **Embeddings**: [Your embedding model - e.g., OpenAI, HuggingFace, etc.]
-- **LLM**: [Your language model - e.g., OpenAI GPT, local model, etc.]
-- **Backend**: [Your framework - e.g., Python/FastAPI, Flask, etc.]
+- **Embeddings**: sentence-transformers/all-mpnet-base-v2
+- **LLM**: mistral-small-latest
+- **Others**: Streamlit
 
 ## 📁 Project Structure
 
 ```
-rag-chatbot/
-├── src/
-│   ├── document_processor.py    # PDF processing with Docling
-│   ├── embeddings.py           # Embedding generation
-│   ├── vector_store.py         # ChromaDB operations
-│   ├── retriever.py            # Context retrieval logic
-│   ├── chatbot.py              # Main chatbot logic
-│   └── main.py                 # Application entry point
-├── data/
-│   └── docling_docs.pdf        # Source document (Docling documentation)
+RAG_APPLICATION/
+├── create_embeddings.py    # PDF processing with Docling and create embeddings in persistant disk (chroma_db)
+│── RAG_streamlit.py           # main app
+├── RAG_utils.py         # Function for RAG operations
+├── 2408.09869v5.pdf       # Source document (Docling documentation)
 ├── requirements.txt            # Python dependencies
-├── config.py                   # Configuration settings
 └── README.md                   # This file
 ```
 
@@ -61,7 +63,7 @@ rag-chatbot/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/rag-chatbot.git
+   git clone https://github.com/najmi-hisham/RAG_APPLICATION.git
    cd rag-chatbot
    ```
 
@@ -78,10 +80,7 @@ rag-chatbot/
 
 ### Usage
 
-1. **Initialize the system**
-   ```bash
-   python src/main.py --setup
-   ```
+1. **Create Vector Database in local using create_embeddings.ipynb file step by step**
    This will:
    - Process the Docling documentation PDF
    - Generate embeddings for document chunks
@@ -89,13 +88,13 @@ rag-chatbot/
 
 2. **Start the chatbot**
    ```bash
-   python src/main.py
+   streamlit run RAG_application.py
    ```
 
-3. **Ask questions about Docling**
+3. **Ask questions about Docling in the chatbot input text box**
    ```
    > What is Docling?
-   > How do I install Docling?
+   > What is the difference between Docling and other parsing tools?
    > What file formats does Docling support?
    ```
 
@@ -106,35 +105,10 @@ This implementation demonstrates the core RAG concepts:
 1. **Document Ingestion**: The Docling documentation PDF is processed and split into meaningful chunks
 2. **Vectorization**: Each chunk is converted to a high-dimensional vector representation
 3. **Storage**: Vectors are stored in ChromaDB with metadata for efficient retrieval
-4. **Query Processing**: When you ask a question, it's also converted to a vector
+4. **Query Processing**: When you ask a question, it's also converted to a vector to check the relevant documents from embeddings vector database
 5. **Similarity Search**: The system finds the most relevant document chunks
 6. **Context Assembly**: Retrieved chunks are combined to form context
 7. **Generation**: The LLM generates a response using both your question and the retrieved context
-
-## 📊 Example Interaction
-
-```
-User: "How do I extract text from a PDF using Docling?"
-
-System Process:
-1. Convert query to embedding
-2. Search ChromaDB for similar content
-3. Retrieve top-k relevant chunks about PDF text extraction
-4. Send query + context to LLM
-5. Generate contextually accurate response
-
-Response: "To extract text from a PDF using Docling, you can use the DocumentConverter class..."
-```
-
-## ⚙️ Configuration
-
-Key settings in `config.py`:
-
-- `CHUNK_SIZE`: Size of document chunks (default: 1000 characters)
-- `CHUNK_OVERLAP`: Overlap between chunks (default: 200 characters)
-- `TOP_K_RESULTS`: Number of similar chunks to retrieve (default: 3)
-- `EMBEDDING_MODEL`: Model used for embeddings
-- `LLM_MODEL`: Language model for response generation
 
 ## 🎯 Key Features
 
@@ -148,8 +122,8 @@ Key settings in `config.py`:
 
 **Current Limitations:**
 - Single document source (by design for simplicity)
-- No conversation memory
 - Basic chunking strategy
+- smamll LLM and embeddings model
 
 **Potential Enhancements:**
 - Multi-document support
@@ -165,10 +139,9 @@ This is an educational project. Feel free to:
 - Try different embedding models
 - Implement additional features
 - Share your learnings!
+- You can try : https://ragapplication-metr4aezlt3uuhcazw7nxt.streamlit.app/
 
-## 📝 License
 
-[Your chosen license]
 
 ## 🙏 Acknowledgments
 
