@@ -189,7 +189,12 @@ st.markdown("""
 
 # App title
 st.title("🤖 RAG-Powered Chat Application")
-
+st.write("""This application allows you to interact with your documents using a retrieval-augmented generation (RAG) system. The knowledge based for this application is from Docling Technical Report (https://arxiv.org/pdf/2408.09869).
+          Ask questions and get answers based on the knowledge base!""")
+st.write("Docling is a parsing tools that can be used to extract information from documents, such as technical reports, manuals, and other structured documents.")
+st.write("You can ask questions like 'What is the purpose of Docling?' or 'How Docling parses documents into text? or related to the source pdf' and get answers based on the knowledge base.")
+st.write("Note: This is a personal project, hence the llm and embedding models was the lowest cost models available at the time of development.")
+st.write("Github: https://github.com/najmi-hisham/RAG_APPLICATION")
 # System status indicator
 if rag_components:
     st.markdown('<div class="status-indicator status-ready">✅ RAG System Ready</div>', unsafe_allow_html=True)
@@ -422,18 +427,19 @@ with st.sidebar:
 with st.expander("ℹ️ RAG Chat Features"):
     st.markdown("""
     **Features of this RAG-powered chat application:**
-    - 🤖 **RAG Integration**: Powered by retrieval-augmented generation
+    - 🤖 **RAG Integration**: Powered by retrieval-augmented generation technology
     - 📚 **Document Search**: Searches through your knowledge base
     - 🧠 **Context Awareness**: Maintains conversation context
-    - 📝 **Fixed-size input**: Text area with maximum 5 lines
     - 📤 **Send button**: Click to send your message
     - 💬 **Chat history**: Messages stack from oldest to newest 
     - 🗑️ **Clear chat**: Remove all messages at once
     - 💾 **Persistent state**: Messages are kept during your session unless cleared
-    - ⚡ **Real-time processing**: Get answers from your documents
+    - ⚡ **Real-time processing**: Get answers from the Docling documents
     Noted: This is only a personal project, hence the llm and embedding models was the lowest cost models available at the time of development.
     """)
 
 # Footer
 st.markdown("---")
 st.markdown("*RAG-Powered Chat Application built with Streamlit* 🚀")
+st.markdown("*Creator: Najmi Hisham* [GitHub](https://github.com/najmi-hisham/RAG_APPLICATION)")
+st.markdown("*Feel free to fork and use it for other knowledge based applications!*")
